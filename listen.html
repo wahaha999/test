@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>ListenToChurch Webcaster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link
+      href="https://listentochurch.r.worldssl.net/assets/fontawesome-pro-5.7.2-web/css/all.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link
+      href="https://listentochurch.r.worldssl.net/css/redesign_v2/bootstrap.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css"
+      integrity="sha512-3q8fi8M0VS+X/3n64Ndpp6Bit7oXSiyCnzmlx6IDBLGlY5euFySyJ46RUlqIVs0DPCGOypqP8IRk/EyPvU28mQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+
+    <script
+      type="text/javascript"
+      src="https://listentochurch.com/js/app.js"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"
+      integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <style>
+      #app {
+        width: 100%;
+        background: transparent
+          linear-gradient(
+            90deg,
+            #c2e8f9,
+            #c2eaf7 9%,
+            #c2ecf5 18%,
+            #c4eef3 27%,
+            #c6f0f0 36%,
+            #c9f2ed 45%,
+            #cdf3eb 55%,
+            #dcf6e4 71%,
+            #e2f6e2 91%,
+            #e8f7e1
+          )
+          0 0 no-repeat padding-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      #vertical-filmstrip {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-height: 100vh;
+        overflow: hidden;
+        margin: 0;
+      }
+
+      .details-container {
+        display: flex;
+        min-height: 2.5rem;
+        padding: 1rem 1rem 0 1rem;
+        text-align: right;
+      }
+
+      .subject {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        color: #fff;
+        transition: opacity 0.6s ease-in-out;
+        z-index: 252;
+        margin-top: 20px;
+      }
+
+      .subject-text--content {
+        font-size: 18px;
+        line-height: 24px;
+        font-weight: 400;
+        letter-spacing: 0px;
+        color: rgb(255, 255, 255);
+        padding: 2px 16px;
+        background-color: rgba(0, 0, 0, 0.6);
+        max-width: 324px;
+        box-sizing: border-box;
+        height: 28px;
+        border-radius: 6px;
+        margin-left: 2px;
+      }
+
+      .watermark-link {
+        background-position: center left;
+        background-repeat: no-repeat;
+        background-size: contain;
+        z-index: 999;
+      }
+
+      .watermark {
+        background-image: url("https://listentochurch.com/assets/images/ListentoChurch.png");
+        max-width: 140px;
+        max-height: 70px;
+        position: static;
+        visibility: visible;
+      }
+
+      .main-container {
+        flex-grow: 1;
+        overflow: auto;
+        display: flex;
+      }
+
+      .main-content {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        min-height: 100%;
+        width: 100%;
+      }
+
+      .main-content--body {
+        align-items: center;
+        display: flex;
+        height: 540px;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .main-content--left {
+        display: inline-flex;
+        flex-direction: column;
+        flex-grow: 1;
+        max-width: 764px;
+      }
+
+      .main-content--right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 0 0 448px;
+        justify-content: center;
+        margin: 1rem 1rem 1rem 0.5rem;
+        position: relative;
+        height: 540px;
+      }
+
+      #videocodec {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 5px;
+        flex: 0 1;
+        margin: 1rem 0.5rem 1rem 1rem;
+        min-width: 448px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .video-container {
+        width: 100%;
+      }
+
+      #video {
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 5px;
+        background-color: #333;
+        aspect-ratio: 16 / 9;
+      }
+
+      #device {
+        padding: 20px;
+        column-gap: 20px;
+      }
+
+      .custom-toogle-btn {
+        border: 1px solid transparent;
+        border-radius: 22px;
+        display: flex;
+        align-items: center;
+        padding: 3px 15px;
+        column-gap: 7px;
+      }
+
+      .custom-toogle-btn:hover {
+        border: 1px solid #1853de;
+        background: #fff 0 0 no-repeat padding-box;
+      }
+
+      .selected-device {
+        max-width: 110px;
+        display: inline-block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .custom-menu {
+        box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
+          0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+        min-width: 190px;
+      }
+
+      .dropdown-item {
+        padding: 0.25rem 1rem;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+      }
+
+      .dropdown-item.active,
+      .dropdown-item:active {
+        background: none;
+        color: rgb(26, 115, 232);
+      }
+
+      .custom-check {
+        visibility: hidden;
+        margin-right: 10px;
+        font-size: 20px;
+      }
+
+      .active .custom-check {
+        visibility: visible;
+      }
+
+      .custom-input {
+        font-size: 14px;
+      }
+
+      .ready-title {
+        font-size: 1.75rem;
+      }
+
+      .ellipsis-text {
+        max-width: 300px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .control-content {
+        margin-top: 30px;
+      }
+
+      #publish_confirm {
+        background-color: rgb(26, 115, 232);
+        border: none;
+        padding: 10px 25px;
+        color: #fff;
+        border-radius: 30px;
+        box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+          0 1px 3px 1px rgba(60, 64, 67, 0.15);
+      }
+
+      #publish_confirm:hover {
+        background-color: rgb(14, 110, 236);
+      }
+
+      #publish_stop {
+        margin-top: 15px;
+        background-color: #dc3545;
+        border: none;
+        padding: 10px 25px;
+        color: #fff;
+        border-radius: 30px;
+        box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+          0 1px 3px 1px rgba(60, 64, 67, 0.15);
+      }
+
+      #publish_stop:hover {
+        background-color: #e61b2f;
+      }
+
+      #publishing-container {
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        color: #333;
+      }
+
+      #publish_state {
+        margin-right: 10px;
+      }
+
+      .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #ff4500;
+        margin: 0 5px;
+        animation: loading-animation 1.5s infinite ease-in-out;
+      }
+
+      .dot:nth-child(1) {
+        animation-delay: 0s;
+      }
+
+      .dot:nth-child(2) {
+        animation-delay: 0.5s;
+      }
+
+      .dot:nth-child(3) {
+        animation-delay: 1s;
+      }
+
+      @keyframes loading-animation {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      #error {
+        margin-top: 30px;
+        color: red;
+      }
+
+      .meta-content {
+        padding: 0.25rem 1rem;
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      #volumeMeterOverlay {
+        position: absolute;
+        top: 14px;
+        left: 41px;
+        right: 1rem;
+        height: 5px;
+        border-radius: 5px;
+        background-color: rgb(26, 115, 232);
+      }
+
+      .custom-slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 5px;
+        border-radius: 5px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: 0.2s;
+        transition: opacity 0.2s;
+        margin-left: 10px;
+      }
+
+      .custom-slider:hover {
+        opacity: 1;
+      }
+
+      .custom-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #0452aa;
+        cursor: pointer;
+      }
+
+      .custom-slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #04aa6d;
+        cursor: pointer;
+      }
+      /**
+             #controls {
+                   height: 200px;
+                   flex-shrink: 0;
+                   display: flex;
+                   align-items: center;
+                   justify-content: center;
+               }
+               #device {
+                   flex-direction: column;
+               }
+               #device > div {
+                   margin: 10px 0;
+                   display: flex;
+                   gap: 20px;
+                   justify-content: center;
+               }
+               select {
+                   width: 200px;
+               }
+               */
+    </style>
+  </head>
+
+  <body>
+    <input
+      type="hidden"
+      name="_token"
+      value="ZgFrUVyNP7Csq4zevpmDGGNcLlYR3VJ0rivaeKe9"
+    />
+    <div id="app">
+      <div id="vertical-filmstrip">
+        <div class="details-container">
+          <a class="watermark-link" href="https://listentochurch.com/">
+            <img
+              src="https://listentochurch.com/assets/images/ListentoChurch.png"
+              class="watermark"
+            />
+          </a>
+          <div class="subject" id="auto-hide">
+            <div class="subject-text--content">ListenToChurch Webcaster</div>
+          </div>
+        </div>
+        <div class="main-container">
+          <div class="main-content">
+            <div class="main-content--body">
+              <div class="main-content--left">
+                <div id="videocodec">
+                  <div class="video-container">
+                    <video id="video" autoplay playsinline></video>
+                  </div>
+                </div>
+                <div class="" id="device" style="display: none">
+                  <div class="dropdown">
+                    <button
+                      class="btn btn-default dropdown-toggle custom-toogle-btn"
+                      type="button"
+                      data-toggle="dropdown"
+                      id="video-device"
+                    >
+                      <i class="bi bi-camera-video"></i>
+                      <span class="selected-device" id="selected-video-device">
+                        Video device</span
+                      >
+                      <span class="caret"></span>
+                    </button>
+                    <div
+                      class="dropdown-menu custom-menu"
+                      id="video-devices"
+                    ></div>
+                  </div>
+                  <div class="dropdown">
+                    <button
+                      class="btn btn-default dropdown-toggle custom-toogle-btn"
+                      type="button"
+                      data-toggle="dropdown"
+                      id="audio-device"
+                    >
+                      <i class="bi bi-mic"></i>
+                      <span class="selected-device" id="selected-audio-device">
+                        Audio device</span
+                      >
+                      <span class="caret"></span>
+                    </button>
+                    <div
+                      class="dropdown-menu custom-menu"
+                      id="audio-devices"
+                    ></div>
+                  </div>
+                  <div class="dropdown">
+                    <button
+                      class="btn btn-default dropdown-toggle custom-toogle-btn"
+                      type="button"
+                      data-toggle="dropdown"
+                      id="media-codec"
+                    >
+                      <i class="bi bi-soundwave"></i>
+                      <span class="selected-device" id="selected-audio-device">
+                        Codecs</span
+                      >
+                      <span class="caret"></span>
+                    </button>
+                    <div
+                      class="dropdown-menu custom-menu"
+                      id="media-codecs"
+                    ></div>
+                  </div>
+                  <div class="dropdown">
+                    <button
+                      class="btn btn-default dropdown-toggle custom-toogle-btn"
+                      type="button"
+                      data-toggle="dropdown"
+                      id="media-bitrate"
+                    >
+                      <i class="bi bi-bar-chart"></i>
+                      <span class="selected-device" id="selected-audio-device">
+                        Bitrates</span
+                      >
+                      <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu custom-menu" id="media-bitrates">
+                      <h6 class="dropdown-header">Video Bitrate (kbps):</h6>
+                      <div class="dropdown-item">
+                        <input
+                          class="form-control"
+                          id="video_bitrate"
+                          type="text"
+                          value="10000"
+                        />
+                      </div>
+                      <div class="dropdown-divider"></div>
+                      <h6 class="dropdown-header">Video Bitrate (kbps):</h6>
+                      <div class="dropdown-item">
+                        <input
+                          class="form-control custom-input"
+                          id="audio_bitrate"
+                          type="text"
+                          value="128"
+                        />
+                      </div>
+                      <div class="dropdown-item">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="audio_voice"
+                          />
+                          <label class="form-check-label" for="audio_voice">
+                            Optimize Audio for Voice Only
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="main-content--right">
+                <div
+                  id="initializing"
+                  class="spinner-border text-primary"
+                  style="display: block"
+                  role="status"
+                >
+                  <span class="sr-only">Initializing...</span>
+                </div>
+                <div id="publishing" style="display: none">
+                  <div class="ready-title">Ready to broadcast?</div>
+                  <div class="control-content text-center">
+                    <div class="">
+                      <button id="publish_confirm">Publish now</button>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="text-center"
+                  id="transmitting"
+                  style="display: none"
+                >
+                  <div id="publishing-container">
+                    <span id="publish_state">Publishing</span>
+                    <div class="loading">
+                      <div class="dot"></div>
+                      <div class="dot"></div>
+                      <div class="dot"></div>
+                    </div>
+                  </div>
+                  <button id="publish_stop">
+                    <i class="bi bi-box-arrow-in-down"></i> Stop
+                  </button>
+                </div>
+                <div class="" id="error" style="display: none">
+                  <span id="error-message"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const TOKEN = "340bc84d-fd52-4270-a5e9-3c46d9c210de";
+      const BROADCAST_URL = "http://localhost:8889/mystream/publish";
+      const PARAMS = new URLSearchParams({
+        user: "test",
+        password: "testpass",
+        token: TOKEN,
+      });
+
+      const INITIALIZING = 0;
+      const DEVICE = 1;
+      const TRANSMITTING = 2;
+      const ERROR = 3;
+      const STOPPED = 4;
+      const UPDATING = 5;
+
+      let state = INITIALIZING;
+      let errorMessage = "";
+
+      let audio = false;
+      let video = false;
+
+      const settings = {
+        videoDevice: { value: "", label: "" },
+        audioDevice: { value: "", label: "" },
+        videoCodec: { value: "", label: "" },
+        audioCodec: { value: "", label: "" },
+        videoBitrate: { value: "", label: "" },
+        audioBitrate: { value: "", label: "" },
+        audioVoice: false,
+      };
+
+      const render = () => {
+        // Hide all the elements
+        ["initializing", "device", "transmitting", "error"].forEach((el) => {
+          $("#" + el).hide();
+        });
+
+        // Show the relevant elements based on the current state
+        switch (state) {
+          case DEVICE:
+            $("#device").css("display", "flex");
+            $("#publishing").show();
+            break;
+
+          case TRANSMITTING:
+            $("#device").css("display", "flex");
+            $("#transmitting").show();
+            $("#publishing").hide();
+            $("#publish_state").text("Publishing...");
+            break;
+
+          case UPDATING:
+            $("#device").css("display", "flex");
+            $("#transmitting").show();
+            $("#publishing").hide();
+            $("#publish_state").text("Updating device...");
+            break;
+
+          case ERROR:
+            $("#error").css("display", "flex");
+            $("#error-message").html("error: " + errorMessage);
+            break;
+
+          case STOPPED:
+            $("#device").css("display", "flex");
+            $("#publishing").show();
+            break;
+        }
+      };
+
+      const restartPause = 2000;
+
+      const unquoteCredential = (v) => JSON.parse(`"${v}"`);
+
+      const linkToIceServers = (links) =>
+        links !== null
+          ? links.split(", ").map((link) => {
+              const m = link.match(
+                /^<(.+?)>; rel="ice-server"(; username="(.*?)"; credential="(.*?)"; credential-type="password")?/i
+              );
+              const ret = {
+                urls: [m[1]],
+              };
+
+              if (m[3] !== undefined) {
+                ret.username = unquoteCredential(m[3]);
+                ret.credential = unquoteCredential(m[4]);
+                ret.credentialType = "password";
+              }
+
+              return ret;
+            })
+          : [];
+
+      const parseOffer = (offer) => {
+        const ret = {
+          iceUfrag: "",
+          icePwd: "",
+          medias: [],
+        };
+
+        for (const line of offer.split("\r\n")) {
+          if (line.startsWith("m=")) {
+            ret.medias.push(line.slice("m=".length));
+          } else if (ret.iceUfrag === "" && line.startsWith("a=ice-ufrag:")) {
+            ret.iceUfrag = line.slice("a=ice-ufrag:".length);
+          } else if (ret.icePwd === "" && line.startsWith("a=ice-pwd:")) {
+            ret.icePwd = line.slice("a=ice-pwd:".length);
+          }
+        }
+
+        return ret;
+      };
+
+      const generateSdpFragment = (offerData, candidates) => {
+        const candidatesByMedia = {};
+        for (const candidate of candidates) {
+          const mid = candidate.sdpMLineIndex;
+          if (candidatesByMedia[mid] === undefined) {
+            candidatesByMedia[mid] = [];
+          }
+          candidatesByMedia[mid].push(candidate);
+        }
+
+        let frag =
+          "a=ice-ufrag:" +
+          offerData.iceUfrag +
+          "\r\n" +
+          "a=ice-pwd:" +
+          offerData.icePwd +
+          "\r\n";
+
+        let mid = 0;
+
+        for (const media of offerData.medias) {
+          if (candidatesByMedia[mid] !== undefined) {
+            frag += "m=" + media + "\r\n" + "a=mid:" + mid + "\r\n";
+
+            for (const candidate of candidatesByMedia[mid]) {
+              frag += "a=" + candidate.candidate + "\r\n";
+            }
+          }
+          mid++;
+        }
+
+        return frag;
+      };
+
+      const setCodec = (section, codec) => {
+        const lines = section.split("\r\n");
+        const lines2 = [];
+        const payloadFormats = [];
+
+        for (const line of lines) {
+          if (!line.startsWith("a=rtpmap:")) {
+            lines2.push(line);
+          } else {
+            if (line.toLowerCase().includes(codec)) {
+              payloadFormats.push(line.slice("a=rtpmap:".length).split(" ")[0]);
+              lines2.push(line);
+            }
+          }
+        }
+
+        const lines3 = [];
+
+        for (const line of lines2) {
+          if (line.startsWith("a=fmtp:")) {
+            if (
+              payloadFormats.includes(
+                line.slice("a=fmtp:".length).split(" ")[0]
+              )
+            ) {
+              lines3.push(line);
+            }
+          } else if (line.startsWith("a=rtcp-fb:")) {
+            if (
+              payloadFormats.includes(
+                line.slice("a=rtcp-fb:".length).split(" ")[0]
+              )
+            ) {
+              lines3.push(line);
+            }
+          } else {
+            lines3.push(line);
+          }
+        }
+
+        return lines3.join("\r\n");
+      };
+
+      const setVideoBitrate = (section, bitrate) => {
+        let lines = section.split("\r\n");
+
+        for (let i = 0; i < lines.length; i++) {
+          if (lines[i].startsWith("c=")) {
+            lines = [
+              ...lines.slice(0, i + 1),
+              "b=TIAS:" + (parseInt(bitrate) * 1024).toString(),
+              ...lines.slice(i + 1),
+            ];
+            break;
+          }
+        }
+
+        return lines.join("\r\n");
+      };
+
+      const setAudioBitrate = (section, bitrate, voice) => {
+        let opusPayloadFormat = "";
+        let lines = section.split("\r\n");
+
+        for (let i = 0; i < lines.length; i++) {
+          if (
+            lines[i].startsWith("a=rtpmap:") &&
+            lines[i].toLowerCase().includes("opus/")
+          ) {
+            opusPayloadFormat = lines[i]
+              .slice("a=rtpmap:".length)
+              .split(" ")[0];
+            break;
+          }
+        }
+
+        if (opusPayloadFormat === "") {
+          return section;
+        }
+
+        for (let i = 0; i < lines.length; i++) {
+          if (lines[i].startsWith("a=fmtp:" + opusPayloadFormat + " ")) {
+            if (voice) {
+              lines[i] =
+                "a=fmtp:" +
+                opusPayloadFormat +
+                " minptime=10;useinbandfec=1;maxaveragebitrate=" +
+                (parseInt(bitrate) * 1024).toString();
+            } else {
+              lines[i] =
+                "a=fmtp:" +
+                opusPayloadFormat +
+                " maxplaybackrate=48000;stereo=1;sprop-stereo=1;maxaveragebitrate" +
+                (parseInt(bitrate) * 1024).toString();
+            }
+          }
+        }
+
+        return lines.join("\r\n");
+      };
+
+      const editAnswer = (
+        answer,
+        videoCodec,
+        audioCodec,
+        videoBitrate,
+        audioBitrate,
+        audioVoice
+      ) => {
+        const sections = answer.split("m=");
+
+        for (let i = 0; i < sections.length; i++) {
+          const section = sections[i];
+          if (section.startsWith("video")) {
+            sections[i] = setVideoBitrate(
+              setCodec(section, videoCodec),
+              videoBitrate
+            );
+          } else if (section.startsWith("audio")) {
+            sections[i] = setAudioBitrate(
+              setCodec(section, audioCodec),
+              audioBitrate,
+              audioVoice
+            );
+          }
+        }
+
+        return sections.join("m=");
+      };
+
+      class Transmitter {
+        constructor(stream) {
+          this.stream = stream;
+          this.pc = null;
+          this.restartTimeout = null;
+          this.eTag = "";
+          this.queuedCandidates = [];
+          this.start();
+        }
+
+        start() {
+          console.log("requesting ICE servers");
+
+          const url = new URL("whip", BROADCAST_URL);
+          url.search = PARAMS.toString();
+
+          fetch(url, {
+            method: "OPTIONS",
+          })
+            .then((res) => this.onIceServers(res))
+            .catch((err) => {
+              console.log("error: " + err);
+              this.scheduleRestart();
+            });
+        }
+
+        onIceServers(res) {
+          this.pc = new RTCPeerConnection({
+            iceServers: linkToIceServers(res.headers.get("Link")),
+          });
+
+          this.pc.onicecandidate = (evt) => this.onLocalCandidate(evt);
+          this.pc.oniceconnectionstatechange = () => this.onConnectionState();
+
+          this.stream.getTracks().forEach((track) => {
+            this.pc.addTrack(track, this.stream);
+          });
+
+          this.pc.createOffer().then((offer) => this.onLocalOffer(offer));
+        }
+
+        onLocalOffer(offer) {
+          this.offerData = parseOffer(offer.sdp);
+          this.pc.setLocalDescription(offer);
+
+          console.log("sending offer");
+
+          const url = new URL("whip", BROADCAST_URL);
+          url.search = PARAMS.toString();
+
+          fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/sdp",
+            },
+            body: offer.sdp,
+          })
+            .then((res) => {
+              if (res.status !== 201) {
+                throw new Error("bad status code");
+              }
+              this.eTag = res.headers.get("E-Tag");
+              return res.text();
+            })
+            .then((sdp) =>
+              this.onRemoteAnswer(
+                new RTCSessionDescription({
+                  type: "answer",
+                  sdp,
+                })
+              )
+            )
+            .catch((err) => {
+              console.log("error: " + err);
+              this.scheduleRestart();
+            });
+        }
+
+        onConnectionState() {
+          if (this.restartTimeout !== null) {
+            return;
+          }
+
+          console.log("peer connection state:", this.pc.iceConnectionState);
+
+          switch (this.pc.iceConnectionState) {
+            case "disconnected":
+              this.scheduleRestart();
+          }
+        }
+
+        onRemoteAnswer(answer) {
+          if (this.restartTimeout !== null) {
+            return;
+          }
+
+          answer = new RTCSessionDescription({
+            type: "answer",
+            sdp: editAnswer(
+              answer.sdp,
+              settings.videoCodec.value,
+              setting.audioCodec.value,
+              setting.videoBitrate.value,
+              settings.audioBitrate.value,
+              settings.audioVoice
+            ),
+          });
+
+          this.pc.setRemoteDescription(new RTCSessionDescription(answer));
+
+          if (this.queuedCandidates.length !== 0) {
+            this.sendLocalCandidates(this.queuedCandidates);
+            this.queuedCandidates = [];
+          }
+        }
+
+        onLocalCandidate(evt) {
+          if (this.restartTimeout !== null) {
+            return;
+          }
+
+          if (evt.candidate !== null) {
+            if (this.eTag === "") {
+              this.queuedCandidates.push(evt.candidate);
+            } else {
+              this.sendLocalCandidates([evt.candidate]);
+            }
+          }
+        }
+
+        sendLocalCandidates(candidates) {
+          const url = new URL("whip", BROADCAST_URL);
+          url.search = PARAMS.toString();
+
+          fetch(url, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/trickle-ice-sdpfrag",
+              "If-Match": this.eTag,
+            },
+            body: generateSdpFragment(this.offerData, candidates),
+          })
+            .then((res) => {
+              if (res.status !== 204) {
+                throw new Error("bad status code");
+              }
+            })
+            .catch((err) => {
+              console.log("error: " + err);
+              this.scheduleRestart();
+            });
+        }
+
+        scheduleRestart() {
+          if (this.restartTimeout !== null) {
+            return;
+          }
+
+          if (this.pc !== null) {
+            this.pc.close();
+            this.pc = null;
+          }
+
+          this.restartTimeout = window.setTimeout(() => {
+            this.restartTimeout = null;
+            this.start();
+          }, restartPause);
+
+          this.eTag = "";
+          this.queuedCandidates = [];
+        }
+      }
+
+      const onTransmit = (stream) => {
+        state = TRANSMITTING;
+        render();
+        document.getElementById("video").srcObject = stream;
+        new Transmitter(stream);
+      };
+
+      function onStop() {
+        console.log("TODO - Add Support to Stop");
+        navigator.mediaDevices
+          .getUserMedia({ video: true, audio: true })
+          .then((mediaStream) => {
+            const stream = mediaStream;
+            const tracks = stream.getTracks();
+            tracks.forEach(function (track) {
+              console.log("Stopping track");
+              track.stop();
+            });
+            state = STOPPED;
+            render();
+          });
+      }
+
+      function onPublish() {
+        if (settings.videoDevice.value !== "screen") {
+          video = false;
+          if (settings.videoDevice.value !== "none") {
+            video = {
+              deviceId: settings.videoDevice.value,
+            };
+          }
+
+          audio = false;
+
+          if (settings.audioDevice.value !== "none") {
+            audio = {
+              deviceId: settings.audioDevice.value,
+            };
+
+            if (!settings.audioVoice) {
+              audio.autoGainControl = false;
+              audio.echoCancellation = false;
+              audio.noiseSuppression = false;
+            }
+          }
+
+          navigator.mediaDevices
+            .getUserMedia({ video, audio })
+            .then(onTransmit);
+        } else {
+          navigator.mediaDevices
+            .getDisplayMedia({
+              video: {
+                width: { ideal: 1920 },
+                height: { ideal: 1080 },
+                frameRate: { ideal: 30 },
+                cursor: "always",
+              },
+              audio: false,
+            })
+            .then(onTransmit);
+        }
+      }
+
+      const populateDevices = () => {
+        return navigator.mediaDevices.enumerateDevices().then((devices) => {
+          const mapping = {
+            videoinput: "#video-devices",
+            audioinput: "#audio-devices",
+          };
+
+          for (const device of devices) {
+            if (mapping[device.kind]) {
+              const option = createDropdownItem(
+                device.deviceId,
+                device.label,
+                `${device.kind.split("input")[0]}-item`,
+                `selected-${device.kind.split("input")[0]}-device`
+              );
+              $(mapping[device.kind]).append(option);
+            }
+          }
+
+          // Add screen and none options
+          const additionalOptions = [
+            {
+              id: "screen",
+              label: "Screen",
+              target: "#video-devices",
+              targetId: "selected-video-device",
+              customClass: "video-item",
+            },
+            {
+              id: "none",
+              label: "None",
+              target: "#video-devices",
+              targetId: "selected-video-device",
+              customClass: "video-item",
+            },
+            {
+              id: "none",
+              label: "None",
+              target: "#audio-devices",
+              targetId: "selected-audio-device",
+              customClass: "audio-item",
+            },
+          ];
+
+          for (const opt of additionalOptions) {
+            const option = createDropdownItem(
+              opt.id,
+              opt.label,
+              opt.customClass,
+              opt.targetId
+            );
+            $(opt.target).append(option);
+          }
+
+          const divider = '<div class="dropdown-divider"></div>';
+          const volumeMeta =
+            '<div class="meta-content" id="volumeSliderContainer"><i class="bi bi-mic-fill"></i><input type="range" class="custom-slider" id="volumeSlider" min="0" max="255"><div id="volumeMeterOverlay"></div></div>';
+
+          $("#audio-devices").append(divider, volumeMeta);
+
+          // Set default video and audio devices
+          const setDefaultDevice = (selector, settingsKey, displayId) => {
+            const defaultDeviceId = $(selector)
+              .children()
+              .eq(0)
+              .data("device-id");
+
+            const defaultDeviceLabel = $(selector).children().eq(0).text();
+            settings[settingsKey] = {
+              value: defaultDeviceId,
+              label: defaultDeviceLabel,
+            };
+            $(selector).children().eq(0).addClass("active");
+            $(`#${displayId}`).text(defaultDeviceLabel);
+          };
+
+          setDefaultDevice(
+            "#video-devices",
+            "videoDevice",
+            "selected-video-device"
+          );
+          setDefaultDevice(
+            "#audio-devices",
+            "audioDevice",
+            "selected-audio-device"
+          );
+        });
+      };
+
+      const populateCodecs = () => {
+        const pc = new RTCPeerConnection({});
+        pc.addTransceiver("video", { direction: "sendonly" });
+        pc.addTransceiver("audio", { direction: "sendonly" });
+
+        return pc.createOffer().then((desc) => {
+          const sdp = desc.sdp.toLowerCase();
+          const videoHeader = '<h6 class="dropdown-header">Video Codec</h6>';
+          $("#media-codecs").append(videoHeader);
+          for (const codec of [
+            "h264/90000",
+            "av1/90000",
+            "vp9/90000",
+            "vp8/90000",
+          ]) {
+            if (sdp.includes(codec)) {
+              const option = createDropdownItem(
+                codec,
+                codec.split("/")[0].toUpperCase(),
+                "video-codec-item",
+                `selected-video-codec`
+              );
+              $("#media-codecs").append(option);
+            }
+          }
+
+          const divider = '<div class="dropdown-divider"></div>';
+          const audioHeader = '<h6 class="dropdown-header">Audio Codec</h6>';
+          $("#media-codecs").append(divider, audioHeader);
+
+          for (const codec of [
+            "opus/48000",
+            "g722/8000",
+            "pcmu/8000",
+            "pcma/8000",
+          ]) {
+            if (sdp.includes(codec)) {
+              const option = createDropdownItem(
+                codec,
+                codec.split("/")[0].toUpperCase(),
+                "audio-codec-item",
+                `selected-audio-codec`
+              );
+
+              $("#media-codecs").append(option);
+            }
+          }
+
+          // Set default video and audio devices
+          const setDefaultDevice = (selector, settingsKey) => {
+            const defaultDeviceId = $(selector)
+              .children()
+              .eq(0)
+              .data("device-id");
+
+            const defaultDeviceLabel = $(selector).eq(0).text();
+            settings[settingsKey] = {
+              value: defaultDeviceId,
+              label: defaultDeviceLabel,
+            };
+            $(selector).eq(0).addClass("active");
+          };
+
+          setDefaultDevice(".video-codec-item", "videoCodec");
+          setDefaultDevice(".audio-codec-item", "audioCodec");
+
+          pc.close();
+        });
+      };
+
+      const createDropdownItem = (
+        deviceId,
+        labelText,
+        customClass,
+        displayId
+      ) => {
+        return $("<div>", {
+          class: `dropdown-item ${customClass}`,
+          "data-device-id": deviceId,
+          html: `<i class="bi bi-check2 custom-check"></i> <span class="ellipsis-text">${labelText}</span>`,
+        }).on("click", function () {
+          const clickedDeviceId = $(this).data("device-id");
+          const clickedDeviceLabel = $(this).text();
+          if (displayId === "selected-video-device") {
+            settings.videoDevice = {
+              value: clickedDeviceId,
+              label: clickedDeviceLabel,
+            };
+          } else if (displayId === "selected-audio-device") {
+            settings.audioDevice = {
+              value: clickedDeviceId,
+              label: clickedDeviceLabel,
+            };
+          } else if (displayId === "selected-video-codec") {
+            settings.videoCodec = {
+              value: clickedDeviceId,
+              label: clickedDeviceLabel,
+            };
+          } else if (displayId === "selected-audio-codec") {
+            settings.videoCodec = {
+              value: clickedDeviceId,
+              label: clickedDeviceLabel,
+            };
+          }
+
+          $(`.${customClass}`).removeClass("active");
+          $(this).addClass("active");
+
+          $(`#${displayId}`).text(clickedDeviceLabel);
+          console.log(`Clicked device ID: ${clickedDeviceId}`);
+        });
+      };
+
+      const checkAccess = () => {
+        const url = new URL("publish", BROADCAST_URL);
+        url.search = PARAMS.toString();
+
+        fetch(url, {
+          method: "GET",
+        })
+          .then((res) => console.log(res))
+          .catch((err) => {
+            console.log("error: " + err);
+            this.scheduleRestart();
+          });
+      };
+
+      const onChangeDevice = (e) => {
+        if (state === TRANSMITTING) {
+          state = UPDATING;
+          render();
+          onPublish();
+        }
+      };
+
+      const audioAnalyser = async (stream) => {
+        const audioContext = new AudioContext();
+        const gainNode = audioContext.createGain();
+        const analyser = audioContext.createAnalyser();
+        const source = audioContext.createMediaStreamSource(stream);
+
+        // Connect the nodes
+        source.connect(analyser);
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        analyser.fftSize = 256;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        const draw = () => {
+          analyser.getByteFrequencyData(dataArray);
+
+          let values = 0;
+
+          for (let i = 0; i < bufferLength; i++) {
+            values += dataArray[i];
+          }
+
+          const average = values / bufferLength;
+          const normalizedAverage = average / 255;
+
+          const currentSliderValue = parseFloat($("#volumeSlider").val());
+          const sliderWidth = $("#volumeSlider").width();
+
+          let meterWidth = normalizedAverage * sliderWidth;
+
+          const maxMeterWidth = currentSliderValue * sliderWidth;
+          meterWidth = Math.min(meterWidth, maxMeterWidth);
+
+          $("#volumeMeterOverlay").css("width", `${meterWidth}px`);
+
+          requestAnimationFrame(draw);
+        };
+
+        draw();
+
+        $("#volumeSlider").on("input", function () {
+          const volume = $(this).val();
+
+          gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+        });
+      };
+
+      const initialize = () => {
+        checkAccess();
+
+        if (navigator.mediaDevices === undefined) {
+          state = ERROR;
+          errorMessage =
+            "Can't access webcams or microphones. Make sure that WebRTC encryption is enabled.";
+          render();
+          return;
+        }
+
+        navigator.mediaDevices
+          .getUserMedia({ video: true, audio: true })
+          .then((stream) => {
+            audioAnalyser(stream);
+            Promise.all([populateDevices(), populateCodecs()]);
+          })
+          .then(() => {
+            state = DEVICE;
+            render();
+          })
+          .catch((err) => {
+            state = ERROR;
+            errorMessage = err.toString();
+            render();
+          });
+      };
+
+      $("#audio_voice").change(function () {
+        if ($(this).is(":checked")) {
+          settings.audioVoice = true;
+        } else {
+          settings.audioVoice = false;
+        }
+      });
+
+      $("#publish_confirm").click(onPublish);
+      $("#publish_stop").click(onStop);
+
+      initialize();
+    </script>
+  </body>
+</html>
